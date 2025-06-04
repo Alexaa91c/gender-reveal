@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gender Reveal - Băiat</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      height: 100%; width: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #e6f2ff;
+      overflow: hidden;
+      display: flex; flex-direction: column; align-items: center; padding-top: 5vh;
+    }
+    h1 {
+      color: #1E90FF; font-size: 6vw; margin-bottom: 2vh; text-align: center;
+    }
+    #reveal-btn {
+      font-size: 5vw; padding: 3vw 6vw;
+      background-color: #1E90FF; color: white;
+      border: none; border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+      z-index: 10;
+    }
+    #balloon {
+      width: 35vw; height: 45vw;
+      background: black;
+      border-radius: 60% / 60%;
+      margin-top: 4vh;
+      position: relative;
+      display: flex; justify-content: center; align-items: center;
+      box-shadow: inset 0 0 10px #444;
+      flex-direction: column;
+      animation: float 2s ease-in-out infinite;
+    }
+    #balloon::after {
+      content: '';
+      position: absolute;
+      bottom: -4vh; left: 50%;
+      transform: translateX(-50%);
+      width: 3px; height: 10vh;
+      background: #444;
+    }
+    #balloon span {
+      font-weight: bold;
+      font-size: 5vw;
+    }
+    .boy { color: #1E90FF; }
+    .girl { color: #FF69B4; }
+    #result {
+      margin-top: 5vh;
+      font-size: 8vw;
+      color: #1E90FF;
+      font-weight: bold;
+      text-align: center;
+      animation: zoom-in 1s ease forwards;
+      display: none;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-1.5vh); }
+    }
+    @keyframes zoom-in {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1.2); opacity: 1; }
+    }
+    .confetti {
+      position: fixed;
+      width: 1.2vw; height: 1.2vw;
+      background-color: #1E90FF;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0.9;
+      z-index: 9999;
+      animation: explode 3s ease-out forwards;
+    }
+    @keyframes explode {
+      to {
+        transform: translate(var(--dx), var(--dy)) scale(0.5);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎉 Gender Reveal 🎉</h1>
+  <button id="reveal-btn">Sparge balonul!</button>
+
+  <div id="balloon">
+    <span class="boy">Băiat</span>
+    <span class="girl">Fată</span>
+  </div>
+
+  <div id="result">Este Băiat! 💙</div>
+
+  <script>
+    const btn = document.getElementById('reveal-btn');
+    const balloon = document.getElementById('balloon');
+    const result = document.getElementById('result');
+
+    function createConfettiExplosion(x, y) {
+      for(let i=0; i<100; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = x + 'px';
+        confetti.style.top = y + 'px';
+
+        const dx = (Math.random()-0.5) * window.innerWidth + 'px';
+        const dy = (Math.random()-0.5) * window.innerHeight + 'px';
+        confetti.style.setProperty('--dx', dx);
+        confetti.style.setProperty('--dy', dy);
+
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 3000);
+      }
+    }
+
+    btn.addEventListener('click', () => {
+      const rect = balloon.getBoundingClientRect();
+      const centerX = rect.left + rect.width/2;
+      const centerY = rect.top + rect.height/2;
+
+      balloon.style.display = 'none';
+      result.style.display = 'block';
+      createConfettiExplosion(centerX, centerY);
+    });
+  </script>
+</body>
+</html>
